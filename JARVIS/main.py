@@ -6,34 +6,42 @@ import wikipedia
 import pywhatkit
 
 audio = sr.Recognizer()
+
 maquina = pyttsx3.init()
-maquina.setProperty('rate', 100)
+maquina.setProperty('rate', 120)
+
+wikipedia.set_lang('pt')
 
 def comando_de_voz():
     try:
         with sr.Microphone() as source:
             print('Ouvindo...')
             voz = audio.listen(source)
-            comando = audio.recognize_google(voz, language='en-us')
+            comando = audio.recognize_google(voz, language='pt-br')
             comando = comando.lower()
     except:
         print('Wait a sec...')
     return comando
 
 def comandos(fala):
-    if('time' == fala):
+    if('horas' == fala):
         hora = datetime.datetime.now().strftime('%H:%M')
         maquina.say('Agora são' + hora)
         maquina.runAndWait()
-    elif ('find' == fala):
-        procurar = comando.replace('procure por', '')
-        wikipedia.set_lang('pt')
-        resultado = wikipedia.summary(procurar, 2)
-        print(resultado)
+    elif ('pesquisar' == fala):
+        maquina.say(f"O que pesquisar?")
+        maquina.runAndWait()
+
+        pesquisa = comando_de_voz()
+        maquina.say(f"Pesquisando {pesquisa} no wikipedia")
+        maquina.runAndWait()
+
+        resultado = wikipedia.summary(pesquisa, sentences=1)
         maquina.say(resultado)
         maquina.runAndWait()
-    elif ('play' == fala):
-        maquina.say("Please say music name")
+
+    elif ('tocar' == fala):
+        maquina.say("Por favor diga o nome da musica:")
         maquina.runAndWait()
 
         musica = comando_de_voz()
@@ -42,5 +50,4 @@ def comandos(fala):
         resultado = pywhatkit.playonyt(musica)
 
 fala = comando_de_voz()
-print(f'Your command is: {fala}')
 comandos(fala)
