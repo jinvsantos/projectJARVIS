@@ -3,4 +3,4 @@ wikipedia
 pywhatkit
 SpeechRecognition
 espeak
-beautifulsoup4
+playsound
