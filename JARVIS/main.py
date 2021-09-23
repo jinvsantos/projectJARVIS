@@ -7,42 +7,40 @@ import pywhatkit
 
 audio = sr.Recognizer()
 maquina = pyttsx3.init()
+maquina.setProperty('rate', 100)
 
-def executa_comando():
-
+def comando_de_voz():
     try:
         with sr.Microphone() as source:
             print('Ouvindo...')
             voz = audio.listen(source)
-            comando = audio.recognize_google(voz, language='pt-BR')
+            comando = audio.recognize_google(voz, language='en-us')
             comando = comando.lower()
-            if 'jarvis' in comando:
-                comando = comando.replace('Providenciando')
-                maquina.say(comando)
-                maquina.runAndWait()
     except:
         print('Wait a sec...')
-
     return comando
 
-def comando_voz_usuario():
-    comando = executa_comando()
-    if 'horas' in comando:
+def comandos(fala):
+    if('time' == fala):
         hora = datetime.datetime.now().strftime('%H:%M')
         maquina.say('Agora são' + hora)
         maquina.runAndWait()
-    elif 'procure por' in comando:
+    elif ('find' == fala):
         procurar = comando.replace('procure por', '')
         wikipedia.set_lang('pt')
         resultado = wikipedia.summary(procurar, 2)
         print(resultado)
         maquina.say(resultado)
         maquina.runAndWait()
-    elif 'toque' in comando:
-        musica = comando.replace('toque', '')
-        resultado = pywhatkit.playonyt(musica)
-        maquina.say('Tocando Musica')
+    elif ('play' == fala):
+        maquina.say("Please say music name")
         maquina.runAndWait()
 
-comando_voz_usuario()
+        musica = comando_de_voz()
+        maquina.say(f'Tocando Musica {musica}')
+        maquina.runAndWait()
+        resultado = pywhatkit.playonyt(musica)
 
+fala = comando_de_voz()
+print(f'Your command is: {fala}')
+comandos(fala)
