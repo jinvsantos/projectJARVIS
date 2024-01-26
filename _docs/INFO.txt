@@ -1,0 +1,1 @@
+necessario virtualenv na raiz do projeto

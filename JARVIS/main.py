@@ -1,48 +1,25 @@
-import speech_recognition as sr
-import pyttsx3
-import pyaudio
-import datetime
-import wikipedia
-import pywhatkit
+from core.Comandos import Comandos
+from core.Maquina import Maquina
+from core.Speech import Speech
 
-audio = sr.Recognizer()
-maquina = pyttsx3.init()
 
-def executa_comando():
+if __name__ == "__main__":
+    maq = Maquina()
+    sp = Speech()
+    comando = Comandos(maquina=maq.maquina)
 
-    try:
-        with sr.Microphone() as source:
-            print('Ouvindo...')
-            voz = audio.listen(source)
-            comando = audio.recognize_google(voz, language='pt-BR')
-            comando = comando.lower()
-            if 'jarvis' in comando:
-                comando = comando.replace('Providenciando')
-                maquina.say(comando)
-                maquina.runAndWait()
-    except:
-        print('Wait a sec...')
-
-    return comando
-
-def comando_voz_usuario():
-    comando = executa_comando()
-    if 'horas' in comando:
-        hora = datetime.datetime.now().strftime('%H:%M')
-        maquina.say('Agora são' + hora)
-        maquina.runAndWait()
-    elif 'procure por' in comando:
-        procurar = comando.replace('procure por', '')
-        wikipedia.set_lang('pt')
-        resultado = wikipedia.summary(procurar, 2)
-        print(resultado)
-        maquina.say(resultado)
-        maquina.runAndWait()
-    elif 'toque' in comando:
-        musica = comando.replace('toque', '')
-        resultado = pywhatkit.playonyt(musica)
-        maquina.say('Tocando Musica')
-        maquina.runAndWait()
-
-comando_voz_usuario()
-
+    while True:
+        print("'desativar' para fechar o assistente".upper())
+        fala = sp.ouvindo()
+        if fala == "jarvis":
+            comando.jarvis()
+        elif (fala == "horas"):
+            comando.horas()
+        elif (fala == "wikipedia"):
+            comando.wikipedia()
+        elif (fala == "tocar musica"):
+            comando.tocar_musica()
+        elif (fala == "desativar"):
+            break
+        else:
+            comando.erro()
