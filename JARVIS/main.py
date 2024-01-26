@@ -1,7 +1,7 @@
 from core.Comandos import Comandos
 from core.Maquina import Maquina
 from core.Speech import Speech
-
+from core.auxiliares import clean
 
 if __name__ == "__main__":
     maq = Maquina()
@@ -9,6 +9,7 @@ if __name__ == "__main__":
     comando = Comandos(maquina=maq.maquina)
 
     while True:
+        clean()
         print("'desativar' para fechar o assistente".upper())
         fala = sp.ouvindo()
         if fala == "jarvis":
